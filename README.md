@@ -1,4 +1,4 @@
-# Kanban-board (Django, DRF)
+# Kanban-board (Django, DRF, Vanila JS)
 
 ____
 ![board_example](board_example.png)
