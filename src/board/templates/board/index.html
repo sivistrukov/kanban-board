@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div id="new-task-modal"
+         class="absolute z-50 w-screen h-screen bg-slate-800 bg-opacity-60 flex hidden justify-center items-center">
+        <div class="p-5 bg-white rounded">
+            <form id="task-form" class="flex flex-col gap-2">
+                {% csrf_token %}
+                {{ new_task_form }}
+                <div class="flex flex-row gap-2 justify-end mt-2">
+                    <button id="close-form-btn" class="h-8 py-1 px-3 text-white transition text-sm bg-red-600 hover:bg-red-500 rounded"
+                            type="button">Close
+                    </button>
+                    <button class="h-8 py-1 px-3 text-white transition text-sm bg-sky-600 hover:bg-sky-500 rounded"
+                            type="submit">Add
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="h-2 bg-sky-700"></div>
+    <header class="pt-10 pb-20 px-20 bg-sky-900 flex justify-between">
+        {% if user.is_authenticated %}
+            <h1 class="text-white text-lg">Hello, {{ user }}</h1>
+            <div>
+                <button id="new-task-btn"
+                        class="h-8 py-1 px-3 text-sm transition text-sky-400 bg-sky-700 hover:bg-sky-600 bg-opacity-60 rounded">
+                    New task
+                </button>
+                <a href="{% url 'logout' %}">
+                    <button class="h-8 py-1 px-3 text-sm transition text-sky-400 bg-sky-700 hover:bg-sky-600 bg-opacity-60 rounded">
+                        Logout
+                    </button>
+                </a>
+            </div>
+        {% endif %}
+    </header>
+    <main class="flex flex-column h-3/4 items-start">
+        <div id="columns-row"
+             class="flex flex-row gap-4 overflow-x-scroll w-full h-full -mt-10 px-20"
+             style="scrollbar-width: none;">
+            {% for column in columns %}
+                <div id="column-{{ column.id }}"
+                     class="flex flex-col min-w-[16rem] px-3 bg-slate-100 border border-slate-100 rounded drop-shadow-md">
+                    <div class="flex flex-row my-2 w-full justify-between w-fit">
+                        <h2>{{ column.title }}</h2>
+                    </div>
+                    <div id="tasks" data-id="{{ column.id }}"
+                         class="flex flex-col h-full overflow-y-scroll gap-1 mb-2 rounded"
+                         style="scrollbar-width: none">
+                        {% for task in column.tasks.all %}
+                            <div id="task-{{ task.id }}" draggable="true"
+                                 data-item="{{ task.id }}"
+                                 class="task p-2 bg-white border border-white rounded drop-shadow-sm cursor-grab">
+                                <h3 class="text-base">{{ task.name }}</h3>
+                                <div class="flex flex-row justify-between items-baseline">
+                                    <p class="text-xs text-gray-500">{{ task.created|date:"m/d/Y" }}</p>
+                                    <button class="delete-task cursor-pointer text-xs text-red-500">x</button>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </main>
+{% endblock %}
+{% block scripts %}
+    <script type="module" src="{% static 'js/base.js' %}"></script>
+{% endblock %}

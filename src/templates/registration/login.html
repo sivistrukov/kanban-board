@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kanban-Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex justify-center items-center bg-slate-300 h-screen">
+<form class="flex flex-col bg-white rounded overflow-hidden min-w-[20rem] max-w-[20rem] drop-shadow-md"
+      method="post" action="{% url 'login' %}">
+    <div class="w-full h-2 bg-sky-600"></div>
+    <div class="flex flex-col gap-3 m-5">
+        {% csrf_token %}
+        <div class="flex flex-col">
+            <label for="id_username">Username:</label>
+            <input id="id_username" type="text" name="username" autofocus
+                   autocapitalize="none" autocomplete="username" maxlength="150"
+                   required class="border rounded px-2 py-1">
+        </div>
+        <div class="flex flex-col">
+            <label for="id_password">Password:</label>
+            <input id="id_password" type="password" name="password"
+                   autocomplete="current-password" required
+                   class="border rounded px-2 py-1">
+        </div>
+        {% if form.errors %}
+            <p class="text-gray-500 text-center">Incorrect login or
+                password!</p>
+        {% endif %}
+        <button class="h-8 py-1 px-3 text-white transition text-sm bg-sky-600 hover:bg-sky-500 rounded"
+                type="submit">Login
+        </button>
+    </div>
+</form>
+</body>
+</html>
